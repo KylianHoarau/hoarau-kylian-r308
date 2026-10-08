@@ -98,3 +98,107 @@ def sauvegarder_etudiants(d, fichier):
 
 # Sauvegarde du dictionnaire dans un fichier texte
 sauvegarder_etudiants(etudiants, "tp1/etudiants.txt")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Fonction permettant de charger les étudiants depuis un fichier texte
+def charger_etudiants(fichier):
+
+    # Création d'un dictionnaire vide
+    d = {}
+
+    try:
+        # Ouverture du fichier en mode lecture
+        with open(fichier, "r", encoding="utf-8") as f:
+
+            # Parcours du fichier ligne par ligne
+            for ligne in f:
+
+                # Suppression des espaces et retours à la ligne
+                ligne = ligne.strip()
+
+                # Vérification du séparateur entre le nom et la note
+                if ":" not in ligne:
+                    continue
+
+                # Séparation du nom et de la note
+                nom, note = ligne.split(":", 1)
+
+                try:
+                    # Conversion de la note en nombre décimal
+                    d[nom] = float(note)
+
+                except ValueError:
+                    # Affichage d'un message si la note est invalide
+                    print("Note invalide pour :", nom)
+
+    except OSError as erreur:
+        # Gestion des erreurs de lecture du fichier
+        print("Erreur lors du chargement :", erreur)
+
+    # Renvoie le dictionnaire contenant les étudiants
+    return d
+
+
+# Chargement des étudiants depuis le fichier texte
+etudiants_charges = charger_etudiants("tp1/etudiants.txt")
+
+# Affichage du dictionnaire chargé
+print("Étudiants chargés :", etudiants_charges)
+
+
+
+
+
+
+# Test de chargement d'un fichier inexistant
+print("Test avec un fichier inexistant :")
+
+# Tentative de lecture d'un fichier qui n'existe pas
+resultat = charger_etudiants("tp1/inexistant.txt")
+
+# Affichage du résultat
+print("Résultat :", resultat)
+
+
+
+
+
+
+# Test avec un dictionnaire vide
+print("Test avec un dictionnaire vide :")
+
+# Création d'un dictionnaire sans étudiant
+etudiants_vides = {}
+
+# Vérification du calcul de la moyenne
+print("Moyenne :", moyenne_classe(etudiants_vides))
+
+# Vérification de la recherche du meilleur étudiant
+print("Meilleur étudiant :", meilleur_etudiant(etudiants_vides))
+
+
+
+
+
+# Test avec des notes invalides et des lignes mal formées
+print("Test avec des notes invalides :")
+
+# Chargement du fichier contenant des erreurs
+etudiants_test = charger_etudiants("tp1/test_notes.txt")
+
+# Affichage des étudiants correctement chargés
+print("Étudiants valides :", etudiants_test)

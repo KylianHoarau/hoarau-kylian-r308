@@ -1,0 +1,4 @@
+Alice:12
+Bob:abc
+LigneSansSeparateur
+Claire:9.5
