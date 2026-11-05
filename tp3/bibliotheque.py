@@ -1,6 +1,7 @@
 """Catalogue et utilisateurs, indexés par titre et par nom."""
 
 import csv
+import json
 import os
 import tempfile
 from pathlib import Path
@@ -126,3 +127,28 @@ class Bibliotheque:
             raise ValueError(f"CSV malformé : {erreur}") from erreur
         self.livres = nouvelle.livres
         self.utilisateurs = nouvelle.utilisateurs
+
+    def rechercher_par_auteur(self, recherche):
+        recherche = recherche.strip().casefold()
+        return [livre for livre in self.livres.values()
+                if recherche in livre.auteur.casefold()]
+
+    def stats(self):
+        return {
+            "total": len(self.livres),
+            "empruntes": sum(not livre.disponible for livre in self.livres.values()),
+            "par_utilisateur": {nom: len(u.emprunts) for nom, u in self.utilisateurs.items()},
+        }
+
+    def exporter_json(self, chemin):
+        donnees = {
+            "livres": [vars(livre) for livre in self.livres.values()],
+            "utilisateurs": [
+                {"nom": u.nom, "limite_emprunts": u.limite_emprunts,
+                 "emprunts": [l.titre for l in u.emprunts]}
+                for u in self.utilisateurs.values()
+            ],
+        }
+        chemin = Path(chemin)
+        chemin.parent.mkdir(parents=True, exist_ok=True)
+        chemin.write_text(json.dumps(donnees, ensure_ascii=False, indent=2), encoding="utf-8")

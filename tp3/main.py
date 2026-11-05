@@ -22,7 +22,8 @@ def main(chemin=DONNEES):
 
     while True:
         print("\n1 Ajouter un livre\n2 Ajouter un utilisateur\n3 Emprunter un livre"
-              "\n4 Rendre un livre\n5 Afficher les livres\n6 Quitter et sauvegarder")
+              "\n4 Rendre un livre\n5 Afficher les livres\n6 Quitter et sauvegarder"
+              "\n7 Statistiques\n8 Rechercher par auteur\n10 Exporter en JSON")
         try:
             choix = input("Votre choix : ").strip()
             if choix == "1":
@@ -64,6 +65,21 @@ def main(chemin=DONNEES):
                     continue
                 print("Données sauvegardées. Au revoir !")
                 return
+            elif choix == "7":
+                print(bibliotheque.stats())
+            elif choix == "8":
+                livres = bibliotheque.rechercher_par_auteur(input("Auteur (ou partie du nom) : "))
+                if not livres:
+                    print("Aucun résultat.")
+                for livre in livres:
+                    livre.afficher()
+            elif choix == "10":
+                destination = Path(chemin).with_suffix(".json")
+                try:
+                    bibliotheque.exporter_json(destination)
+                    print(f"Export créé : {destination}")
+                except OSError as erreur:
+                    print(f"Export impossible : {erreur}")
             else:
                 print("Choix invalide.")
         except ValueError as erreur:
