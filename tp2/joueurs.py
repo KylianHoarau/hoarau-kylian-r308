@@ -41,3 +41,34 @@ class JoueurIA:
         if not libres:
             raise ValueError("Aucun coup possible : la grille est pleine.")
         return self.generateur.choice(libres)
+
+
+class JoueurIAMalin(JoueurIA):
+    """Gagne si possible, sinon bloque, sinon choisit au hasard."""
+
+    def __init__(self, nom="IA maline", generateur=None):
+        super().__init__(nom, generateur)
+
+    def prochain_coup(self, tab, symbole):
+        if symbole not in ("X", "O"):
+            raise ValueError("Le symbole doit être X ou O.")
+        cases = cases_de(tab)
+        libres = coups_libres(tab)
+        if not libres:
+            raise ValueError("Aucun coup possible : la grille est pleine.")
+
+        def gagnant_apres(x, y, candidat):
+            def valeur(ligne, colonne):
+                return candidat if (ligne, colonne) == (x, y) else cases[ligne][colonne]
+
+            return (any(all(valeur(i, j) == candidat for j in range(3)) for i in range(3))
+                    or any(all(valeur(i, j) == candidat for i in range(3)) for j in range(3))
+                    or all(valeur(i, i) == candidat for i in range(3))
+                    or all(valeur(i, 2 - i) == candidat for i in range(3)))
+
+        adversaire = "O" if symbole == "X" else "X"
+        for candidat in (symbole, adversaire):
+            for x, y in libres:
+                if gagnant_apres(x, y, candidat):
+                    return x, y
+        return self.generateur.choice(libres)

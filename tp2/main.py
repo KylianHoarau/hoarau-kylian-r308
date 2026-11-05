@@ -1,7 +1,7 @@
 """Menu du TP2 : python tp2/main.py depuis la racine du dépôt."""
 
 from jeu import jouer_partie
-from joueurs import JoueurHumain, JoueurIA
+from joueurs import JoueurHumain, JoueurIA, JoueurIAMalin
 
 
 def main():
@@ -11,7 +11,8 @@ def main():
               "\n2 Deux humains"
               "\n3 IA contre IA (20 parties)"
               "\n4 Afficher les scores"
-              "\n5 Quitter")
+              "\n5 Quitter"
+              "\n6 Humain contre IA maline")
         try:
             choix = input("Votre choix : ").strip()
             if choix == "1":
@@ -34,6 +35,9 @@ def main():
             elif choix == "5":
                 print("Au revoir !")
                 return
+            elif choix == "6":
+                resultat = jouer_partie(JoueurHumain("Humain"), JoueurIAMalin())
+                scores[resultat] += 1
             else:
                 print("Choix invalide.")
         except (EOFError, KeyboardInterrupt):
