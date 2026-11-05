@@ -4,11 +4,41 @@ TP Python R3.08 - BUT RT2. Les travaux sont rangés dans un dossier par TP.
 
 ## TP1
 
-Depuis la racine du dépôt :
+Python 3.10 ou plus, sans dépendance externe. Depuis la racine du dépôt :
+
+```sh
+python tp1/main.py
+```
+
+Ce menu donne accès à « Devine le nombre », au Pendu avec mot aléatoire ou
+choisi par un autre joueur, et au hall of fame. Les victoires sont enregistrées
+dans `tp1/scores.txt` au format `nom:victoires` et relues au lancement. Une
+partie terminée propose de rejouer. Le mode à deux joueurs masque la saisie
+du mot choisi par l'autre personne. Les mots accentués et les majuscules sont
+acceptés. Pour essayer chaque partie séparément :
 
 ```sh
 python tp1/partie_A.py
+python tp1/devine_nombre.py
+python tp1/pendu.py
 ```
+
+La démonstration de la partie A affiche le jeu d'essai Alice, Bob et Claire,
+la moyenne 12.17 et le meilleur étudiant Bob. Elle utilise un fichier
+temporaire pour l'essai de sauvegarde et ne modifie pas `tp1/etudiants.txt`.
+Le jeu du nombre propose 1 à 100 et dix essais, avec des bornes personnalisables
+dans son lancement séparé. Les mots du Pendu sont lus depuis `tp1/mots.txt` ;
+une liste intégrée est utilisée si ce fichier manque. Le mot à trouver accepte
+au plus sept erreurs ; une lettre répétée n'en ajoute aucune.
+
+Pour vérifier le TP1 :
+
+```sh
+python -m unittest discover -s tp1 -p "test_*.py" -v
+```
+
+Le tournoi contre l'IA du voisin se joue en salle avec un partenaire ; le
+mode à deux joueurs prépare le défi du mot choisi par un voisin.
 
 ## TP2 - Morpion
 
